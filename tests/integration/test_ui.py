@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import asyncio
 import json
 
 import httpx
@@ -35,8 +36,10 @@ async def test_ui_uses_read_only_service_and_records_audit(
         assert len(data["findings"]) == 2 and data["next_cursor"]
         assert data["telemetry_freshness"]
         finding_id = data["findings"][0]["finding_id"]
-        detail = await client.get(f"/ui/api/findings/{finding_id}")
-        explanation = await client.get(f"/ui/api/findings/{finding_id}/explanation")
+        detail, explanation = await asyncio.gather(
+            client.get(f"/ui/api/findings/{finding_id}"),
+            client.get(f"/ui/api/findings/{finding_id}/explanation"),
+        )
         assert detail.status_code == explanation.status_code == 200
         assert detail.json()["finding"]["evidence_references"]
         assert explanation.json()["details"]["recommended_steps"]
