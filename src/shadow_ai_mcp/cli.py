@@ -42,7 +42,9 @@ def main() -> None:
         else:
             import uvicorn
 
-            uvicorn.run(app, host=settings.host, port=settings.port, log_config=None)
+            uvicorn.run(
+                app, host=settings.host, port=settings.port, log_config=None, access_log=False
+            )
     except ValidationError as exc:
         fields = sorted({str(item["loc"][-1]) for item in exc.errors() if item["loc"]})
         print(

@@ -19,6 +19,7 @@ Settings use `SHAI_` environment variables, with `.env` supported for local use.
 | `METADATA_ALLOWLIST` | Empty list; permitted scalar source/registry metadata names |
 | `SHARED_EGRESS_IPS`, `ALLOWED_ROUTE_EXCEPTIONS` | Known NAT IPs and explicit MCP server IDs/URLs |
 | `RUN_WORKER`, `LOG_LEVEL` | Poller enabled, `INFO` |
+| `UI_ENABLED` | False by default; serves the read-only UI at `/ui/` when explicitly enabled |
 
 Connector entries support `connector_id`, `source_type`, `kind`, `endpoint`, `fixture_path`/`file_path`, `secret_env` or `secret_file`, `method`, `static_params`, `field_mapping`, `records_field`, `cursor_field`, parameter names, `mapping_version`, `health_path`, `timeout_seconds`, `retries`, `rate_limit_per_second`, and `max_pages`. See [fixtures](../examples/connectors.yaml) and the [generic HTTP example](../examples/http-connectors.yaml). HTTP connectors require HTTPS outside development. Use a secret manager to mount a secret file or inject a short-lived environment value; no secret goes in YAML.
 

@@ -44,6 +44,7 @@ class Settings(BaseSettings):
     metadata_allowlist: list[str] = Field(default_factory=list)
     log_level: str = "INFO"
     run_worker: bool = True
+    ui_enabled: bool = False
     shared_egress_ips: list[str] = Field(default_factory=list)
     allowed_route_exceptions: list[str] = Field(default_factory=list)
 

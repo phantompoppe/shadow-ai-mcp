@@ -18,6 +18,7 @@ OBSERVATIONS = Counter("shadow_observation_ingested_total", "Observations", ["so
 DETECTION_DURATION = Histogram("shadow_detection_duration_seconds", "Detection duration")
 FINDINGS = Counter("shadow_findings_total", "Findings", ["operation", "detection"])
 MCP_DURATION = Histogram("shadow_mcp_request_seconds", "MCP request duration", ["tool", "outcome"])
+UI_DURATION = Histogram("shadow_ui_request_seconds", "UI request duration", ["view", "outcome"])
 AUTH_FAILURES = Counter("shadow_auth_failure_total", "Auth failures", ["category"])
 DB_HEALTH = Gauge("shadow_database_health", "Database reachable")
 TELEMETRY_AGE = Gauge("shadow_telemetry_age_seconds", "Age of last success", ["source"])

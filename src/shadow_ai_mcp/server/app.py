@@ -15,7 +15,7 @@ from prometheus_client import CONTENT_TYPE_LATEST, generate_latest
 from pydantic import TypeAdapter
 from starlette.applications import Starlette
 from starlette.responses import JSONResponse, Response
-from starlette.routing import Mount, Route
+from starlette.routing import BaseRoute, Mount, Route
 from starlette.types import ASGIApp, Receive, Scope, Send
 
 from shadow_ai_mcp.auth.core import Authenticator, SecurityError, current_principal
@@ -38,6 +38,7 @@ from shadow_ai_mcp.observability.metrics import (
     MCP_DURATION,
     configure_logging,
 )
+from shadow_ai_mcp.server.ui import build_ui
 from shadow_ai_mcp.storage.db import Database
 from shadow_ai_mcp.storage.repository import Repository
 from shadow_ai_mcp.tools.service import InvestigationService
@@ -47,10 +48,17 @@ logger = logging.getLogger(__name__)
 
 
 class RequestGuard:
-    def __init__(self, app: ASGIApp, settings: Settings, repository: Repository | None = None):
+    def __init__(
+        self,
+        app: ASGIApp,
+        settings: Settings,
+        repository: Repository | None = None,
+        required_scope: str | None = None,
+    ):
         self.app = app
         self.auth = Authenticator(settings)
         self.repository = repository
+        self.required_scope = required_scope
         self.semaphore = asyncio.Semaphore(settings.maximum_concurrent_requests)
         self.timeout = settings.request_timeout_seconds
 
@@ -68,7 +76,11 @@ class RequestGuard:
             AUTH_FAILURES.labels("unauthenticated").inc()
             if self.repository:
                 try:
-                    tool = headers.get("mcp-name", "mcp_protocol")
+                    tool = (
+                        "ui_access"
+                        if str(scope.get("path", "")).startswith("/ui")
+                        else headers.get("mcp-name", "mcp_protocol")
+                    )
                     if tool not in {
                         "search_shadow_ai",
                         "get_shadow_ai_finding",
@@ -76,6 +88,7 @@ class RequestGuard:
                         "find_llm_proxy_bypass",
                         "find_mcp_gateway_bypass",
                         "check_ai_approval",
+                        "ui_access",
                     }:
                         tool = "mcp_protocol"
                     self.repository.audit(
@@ -100,6 +113,34 @@ class RequestGuard:
                 status_code=401,
             )
             await response(scope, receive, send)
+            return
+        if self.required_scope and not (
+            self.required_scope in principal.scopes or "shadow_ai:admin" in principal.scopes
+        ):
+            AUTH_FAILURES.labels("forbidden").inc()
+            if self.repository:
+                try:
+                    self.repository.audit(
+                        audit_id=uuid.uuid4().hex,
+                        occurred_at=datetime.now(UTC),
+                        tool_name="ui_access",
+                        caller_id=principal.identity,
+                        correlation_id=uuid.uuid4().hex,
+                        duration_ms=0,
+                        filters={},
+                        result_count=0,
+                        outcome="FORBIDDEN",
+                    )
+                except Exception:
+                    logger.warning("authorization audit unavailable")
+            await JSONResponse(
+                {
+                    "code": "FORBIDDEN",
+                    "message": "Insufficient scope",
+                    "correlation_id": uuid.uuid4().hex,
+                },
+                status_code=403,
+            )(scope, receive, send)
             return
         try:
             await asyncio.wait_for(self.semaphore.acquire(), timeout=0.01)
@@ -351,13 +392,23 @@ def build(settings: Settings) -> tuple[MCPServer, Starlette, Worker, Investigati
                 await worker.close()
                 db.engine.dispose()
 
-    app = Starlette(
-        routes=[
-            Route("/healthz", health),
-            Route("/readyz", ready),
-            Route("/metrics", metrics),
-            Mount("/", app=RequestGuard(mcp_app, settings, repository)),
-        ],
-        lifespan=lifespan,
-    )
+    routes: list[BaseRoute] = [
+        Route("/healthz", health),
+        Route("/readyz", ready),
+        Route("/metrics", metrics),
+    ]
+    if settings.ui_enabled:
+        routes.append(
+            Mount(
+                "/ui",
+                app=RequestGuard(
+                    build_ui(service, settings),
+                    settings,
+                    repository,
+                    required_scope="shadow_ai:read",
+                ),
+            )
+        )
+    routes.append(Mount("/", app=RequestGuard(mcp_app, settings, repository)))
+    app = Starlette(routes=routes, lifespan=lifespan)
     return mcp, app, worker, service

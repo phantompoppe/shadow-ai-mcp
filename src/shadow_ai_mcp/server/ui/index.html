@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="dark">
+    <title>Shadow AI · Investigation console</title>
+    <link rel="stylesheet" href="./app.css">
+    <script src="./app.js" defer></script>
+  </head>
+  <body>
+    <div class="app-shell">
+      <aside class="sidebar" aria-label="Primary navigation">
+        <a class="brand" href="./" aria-label="Shadow AI home">
+          <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span></span>
+          <span class="brand-name">SHADOW<span>AI</span><small>MCP</small></span>
+        </a>
+        <div class="workspace-label">WORKSPACE <span class="workspace-caret">⌄</span></div>
+        <div class="workspace-name"><span class="workspace-icon">S</span><span>Security operations<small>Investigation workspace</small></span></div>
+        <p class="nav-heading">DISCOVER</p>
+        <nav aria-label="Views">
+          <button class="nav-link active" type="button" data-view="findings" aria-current="page"><span class="nav-glyph grid-glyph" aria-hidden="true"></span>Findings<span class="nav-count" id="nav-count">—</span></button>
+          <button class="nav-link" type="button" data-view="registry"><span class="nav-glyph diamond-glyph" aria-hidden="true"></span>Approval registry</button>
+          <button class="nav-link" type="button" data-view="telemetry"><span class="nav-glyph pulse-glyph" aria-hidden="true"></span>Telemetry health</button>
+        </nav>
+        <div class="sidebar-bottom">
+          <div class="read-only-note"><span class="lock-icon" aria-hidden="true">◇</span><div><strong>Read-only workspace</strong><small>Investigation without enforcement</small></div></div>
+          <div class="sidebar-footer">SHADOW AI MCP <span>·</span> v0.1</div>
+        </div>
+      </aside>
+
+      <div class="main-column">
+        <header class="topbar">
+          <div class="breadcrumb"><span>Security operations</span><span class="slash">/</span><strong id="breadcrumb-title">Findings</strong></div>
+          <div class="top-actions"><span class="utc-clock" id="utc-clock">UTC —</span><span class="environment-pill"><span></span> READ ONLY</span></div>
+        </header>
+
+        <main id="main-content">
+          <section class="view active" id="findings-view" aria-labelledby="findings-title">
+            <div class="page-intro">
+              <div><div class="eyebrow"><span class="eyebrow-line"></span> INVESTIGATION CONSOLE</div><h1 id="findings-title">Shadow AI findings<span class="title-dot">.</span></h1><p>Activity outside approved AI and MCP routes, with evidence and confidence in context.</p></div>
+              <div class="intro-aside"><span class="tiny-orbit" aria-hidden="true"></span><span>DETECTION ENGINE<br><strong>SHAI-001—005</strong></span></div>
+            </div>
+
+            <div class="coverage-banner" id="coverage-banner" role="status"><div class="coverage-symbol">◈</div><div><strong id="coverage-title">Checking telemetry coverage</strong><p id="coverage-detail">Loading connector freshness and warnings…</p></div><button type="button" class="text-action" id="view-health">View health <span aria-hidden="true">↗</span></button></div>
+
+            <div class="metric-grid" aria-label="Current page summary">
+              <div class="metric-card"><span class="metric-label">FINDINGS IN VIEW</span><div class="metric-value" id="metric-findings">—</div><span class="metric-foot">Current result page</span><span class="metric-decoration circles" aria-hidden="true"></span></div>
+              <div class="metric-card"><span class="metric-label">HIGH PRIORITY</span><div class="metric-value" id="metric-high">—</div><span class="metric-foot"><span class="mini-dot hot"></span> High and critical severity</span><span class="metric-decoration bars" aria-hidden="true"></span></div>
+              <div class="metric-card"><span class="metric-label">MCP EXPOSURE</span><div class="metric-value" id="metric-mcp">—</div><span class="metric-foot">Gateway bypass / unapproved</span><span class="metric-decoration nodes" aria-hidden="true"></span></div>
+              <div class="metric-card"><span class="metric-label">TELEMETRY SOURCES</span><div class="metric-value" id="metric-sources">—</div><span class="metric-foot" id="metric-sources-foot">Checking coverage</span><span class="metric-decoration signal" aria-hidden="true"></span></div>
+            </div>
+
+            <section class="panel findings-panel" aria-labelledby="results-heading">
+              <div class="panel-heading"><div><div class="eyebrow muted">INVESTIGATE</div><h2 id="results-heading">Detected activity</h2></div><span class="result-counter" id="result-counter">Loading…</span></div>
+              <form class="filters" id="filters-form">
+                <label class="search-field"><span class="search-icon" aria-hidden="true"></span><span class="sr-only">Exact destination</span><input id="filter-destination" name="destination" type="search" placeholder="Exact destination" maxlength="256" autocomplete="off"></label>
+                <label class="filter-select"><span class="sr-only">Detection</span><select id="filter-detection" name="detection_ids"><option value="">All detections</option><option value="SHAI-001">Proxy bypass</option><option value="SHAI-002">Required route</option><option value="SHAI-003">Gateway bypass</option><option value="SHAI-004">Unapproved server</option><option value="SHAI-005">Expired approval</option></select></label>
+                <label class="filter-select"><span class="sr-only">Severity</span><select id="filter-severity" name="severities"><option value="">All severity</option><option value="critical">Critical</option><option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option><option value="informational">Informational</option></select></label>
+                <label class="filter-select"><span class="sr-only">Confidence</span><select id="filter-confidence" name="confidence_levels"><option value="">All confidence</option><option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option></select></label>
+                <button class="primary-button" type="submit">Apply filters</button><button class="quiet-button" id="clear-filters" type="button">Clear</button>
+              </form>
+              <div class="table-wrap"><table><thead><tr><th scope="col">FINDING</th><th scope="col">SEVERITY</th><th scope="col">ACTOR / ASSET</th><th scope="col">DESTINATION</th><th scope="col">CONFIDENCE</th><th scope="col">LAST SEEN</th><th scope="col"><span class="sr-only">Open</span></th></tr></thead><tbody id="findings-body"></tbody></table></div>
+              <div class="table-state" id="findings-state" role="status" aria-live="polite">Loading findings…</div>
+              <div class="pagination"><span id="page-label">Page 1</span><div><button type="button" id="previous-page" disabled>← Previous</button><button type="button" id="next-page" disabled>Next →</button></div></div>
+            </section>
+            <p class="data-note">Findings are deterministic inferences from available telemetry. Verify source evidence and coverage before making a decision.</p>
+          </section>
+
+          <section class="view" id="registry-view" aria-labelledby="registry-title" hidden>
+            <div class="page-intro"><div><div class="eyebrow"><span class="eyebrow-line"></span> APPROVAL REGISTRY</div><h1 id="registry-title">Check an asset<span class="title-dot">.</span></h1><p>Look up the approved route, owner, risk tier, and expiration state.</p></div></div>
+            <section class="panel lookup-panel"><div class="eyebrow muted">REGISTRY LOOKUP</div><h2>Asset approval</h2><p class="panel-description">Search by an exact asset ID, name, or endpoint. Results reflect the latest imported registry snapshot.</p><form id="approval-form" class="approval-form"><label for="approval-kind">LOOKUP BY</label><select id="approval-kind"><option value="asset_id">Asset ID</option><option value="name">Name</option><option value="endpoint">Endpoint URL</option></select><label for="approval-value">VALUE</label><input id="approval-value" required maxlength="1024" placeholder="e.g. ai-expired" autocomplete="off"><button type="submit" class="primary-button">Check approval <span aria-hidden="true">→</span></button></form><div id="approval-result" class="approval-result" role="status" aria-live="polite"><div class="blank-illustration" aria-hidden="true">◇</div><strong>Ready to look up an asset</strong><p>Enter an asset identifier to inspect its approval record.</p></div></section>
+          </section>
+
+          <section class="view" id="telemetry-view" aria-labelledby="telemetry-title" hidden>
+            <div class="page-intro"><div><div class="eyebrow"><span class="eyebrow-line"></span> SIGNAL COVERAGE</div><h1 id="telemetry-title">Telemetry health<span class="title-dot">.</span></h1><p>Freshness and availability affect how strongly a finding can be interpreted.</p></div></div>
+            <section class="panel health-panel"><div class="panel-heading"><div><div class="eyebrow muted">CONNECTOR STATUS</div><h2>Source coverage</h2></div><span class="result-counter" id="health-count">—</span></div><div class="health-grid" id="health-grid"></div><div class="health-note" id="health-note">Loading coverage…</div></section>
+          </section>
+        </main>
+      </div>
+    </div>
+
+    <div class="drawer-backdrop" id="drawer-backdrop" hidden></div>
+    <aside class="detail-drawer" id="detail-drawer" aria-label="Finding details" aria-modal="true" role="dialog" hidden tabindex="-1"><div class="drawer-top"><span>FINDING DETAILS</span><button type="button" id="close-drawer" aria-label="Close finding details">×</button></div><div id="detail-content" class="detail-content" role="status" aria-live="polite"></div></aside>
+  </body>
+</html>

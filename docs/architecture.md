@@ -1,6 +1,6 @@
 # Architecture overview
 
-One process hosts the official MCP Python SDK's Streamable HTTP endpoint, the scheduled worker, normalization and detection modules, and PostgreSQL access. The same process supports stdio in explicit local development mode. The ASGI shell supplies `/healthz`, `/readyz`, and `/metrics`; the MCP endpoint contains six investigation tools and no mutation tools.
+One process hosts the official MCP Python SDK's Streamable HTTP endpoint, the scheduled worker, normalization and detection modules, and PostgreSQL access. The same process supports stdio in explicit local development mode. The ASGI shell supplies `/healthz`, `/readyz`, and `/metrics`; the MCP endpoint contains six investigation tools and no mutation tools. An optional same-origin UI at `/ui/` calls the same investigation service through authenticated read-only JSON routes.
 
 ```mermaid
 flowchart LR

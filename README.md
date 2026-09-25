@@ -8,6 +8,7 @@ Read-only MCP investigation server for direct AI use, MCP gateway bypass, unappr
 cp .env.example .env
 docker compose up --build
 # MCP: http://127.0.0.1:8000/mcp
+# UI:  http://127.0.0.1:8000/ui/
 # GET http://127.0.0.1:8000/healthz and /readyz
 ```
 
@@ -19,7 +20,7 @@ SHAI_DATABASE_URL=sqlite:///shadow.db SHAI_DEVELOPMENT_MODE=true SHAI_AUTH_MODE=
   SHAI_HOST=127.0.0.1 .venv/bin/shadow-ai demo
 ```
 
-The SQLite path is for local development and tests; production requires PostgreSQL. `shadow-ai demo` migrates, loads fixtures, runs detections, and starts Streamable HTTP. `shadow-ai migrate`, `shadow-ai sync`, and `shadow-ai serve` separate those steps. The local demo has six source events, an approved proxy event, an approved gateway event, and a three-asset registry. A missing actor/device fixture demonstrates reduced confidence. See [local development](docs/local-development.md).
+The SQLite path is for local development and tests; production requires PostgreSQL. For a Python-only UI demo, also set `SHAI_UI_ENABLED=true` before `shadow-ai demo`. `shadow-ai demo` migrates, loads fixtures, runs detections, and starts Streamable HTTP. `shadow-ai migrate`, `shadow-ai sync`, and `shadow-ai serve` separate those steps. The local demo has six source events, an approved proxy event, an approved gateway event, and a three-asset registry. A missing actor/device fixture demonstrates reduced confidence. See [local development](docs/local-development.md) and the [UI guide](docs/ui.md).
 
 ## MCP client configuration
 
@@ -105,5 +106,6 @@ asyncio.run(main())
 - [Architecture](docs/architecture.md), [threat model](docs/threat-model.md), [connector development](docs/connector-development.md)
 - [Configuration](docs/configuration.md), [data model](docs/data-model.md), [detections](docs/detections.md), [MCP tools](docs/mcp-tools.md)
 - [Local development](docs/local-development.md), [production deployment](docs/production-deployment.md), [privacy and retention](docs/privacy-retention.md), [troubleshooting](docs/troubleshooting.md)
+- [Investigation UI](docs/ui.md)
 
 The provider catalog is illustrative. Domain-based detection is suggestive and needs corroborating identity, device, route, and source evidence for stronger confidence. Live SIEM, proxy, gateway, and registry HTTP endpoints require enterprise configuration and have not been verified by this fixture demo.
