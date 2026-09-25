@@ -1,0 +1,5 @@
+{
+  "records": [
+    {"id":"proxy-approved","offset_minutes":-7,"event_type":"llm_request","user_id":"alice","device_id":"device-a","source_ip":"10.0.0.11","destination_url":"https://api.exampleai.test/v1/chat","provider":"exampleai","model":"model-test","application_id":"approved-client","correlation_id":"corr-approved","route_type":"llm_proxy","route_status":"success","evidence_reference":"proxy://events/proxy-approved","request_body":"NEVER INGEST THIS"}
+  ]
+}

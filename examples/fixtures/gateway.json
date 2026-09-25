@@ -1,0 +1,5 @@
+{
+  "records": [
+    {"id":"gateway-approved","offset_minutes":-5,"event_type":"mcp_request","user_id":"alice","device_id":"device-a","source_ip":"10.0.0.11","mcp_server_id":"mcp-approved","mcp_server_url":"https://mcp.approved.test/mcp","mcp_client":"ide","mcp_tool_name":"search","correlation_id":"corr-mcp","route_type":"mcp_gateway","route_status":"success","evidence_reference":"gateway://events/gateway-approved","tool_result":"NEVER INGEST THIS"}
+  ]
+}

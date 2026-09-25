@@ -1,0 +1,10 @@
+{
+  "records": [
+    {"id":"net-approved","offset_minutes":-7,"event_type":"network_request","user_id":"alice","device_id":"device-a","source_ip":"10.0.0.11","destination_url":"https://api.exampleai.test/v1/chat","provider":"exampleai","application_id":"approved-client","correlation_id":"corr-approved","route_type":"direct","evidence_reference":"siem://events/net-approved","prompt":"NEVER INGEST THIS"},
+    {"id":"net-direct","offset_minutes":-6,"event_type":"network_request","user_id":"bob","device_id":"device-b","source_ip":"10.0.0.12","destination_url":"https://api.exampleai.test/v1/chat","provider":"exampleai","application_id":"unknown-client","route_type":"direct","evidence_reference":"siem://events/net-direct"},
+    {"id":"net-mcp-approved","offset_minutes":-5,"event_type":"mcp_connection","user_id":"alice","device_id":"device-a","source_ip":"10.0.0.11","mcp_server_id":"mcp-approved","mcp_server_url":"https://mcp.approved.test/mcp","mcp_client":"ide","correlation_id":"corr-mcp","route_type":"direct","evidence_reference":"siem://events/net-mcp-approved"},
+    {"id":"net-mcp-unapproved","offset_minutes":-4,"event_type":"mcp_connection","user_id":"charlie","device_id":"device-c","source_ip":"10.0.0.13","mcp_server_id":"mcp-unknown","mcp_server_url":"https://rogue.tools.test/mcp","mcp_client":"ide","route_type":"direct","evidence_reference":"siem://events/net-mcp-unapproved","tool_arguments":{"secret":"NEVER INGEST THIS"}},
+    {"id":"net-expired","offset_minutes":-3,"event_type":"network_request","user_id":"dana","device_id":"device-d","source_ip":"10.0.0.14","destination_url":"https://api.samplemodel.test/v1/generate","provider":"samplemodel","route_type":"direct","evidence_reference":"siem://events/net-expired"},
+    {"id":"net-gap","offset_minutes":-2,"event_type":"network_request","source_ip":"203.0.113.10","destination_url":"https://api.exampleai.test/v1/chat","provider":"exampleai","route_type":"direct","evidence_reference":"siem://events/net-gap","environment":"production"}
+  ]
+}

@@ -1,0 +1,52 @@
+assets:
+  - asset_id: ai-example
+    asset_type: ai_service
+    name: Example AI
+    canonical_endpoint: https://api.exampleai.test/v1/chat
+    alternate_endpoints: [https://chat.exampleai.test/]
+    owner: AI Platform
+    business_purpose: Approved testing
+    approval_status: approved
+    approval_date: '2025-01-01T00:00:00Z'
+    expiration_date: '2099-01-01T00:00:00Z'
+    allowed_users: []
+    allowed_groups: []
+    allowed_applications: []
+    allowed_environments: [production]
+    required_route: llm_proxy
+    risk_tier: medium
+    metadata: {}
+  - asset_id: mcp-approved
+    asset_type: mcp_server
+    name: Approved MCP
+    canonical_endpoint: https://mcp.approved.test/mcp
+    alternate_endpoints: [https://alias.approved.test/mcp]
+    owner: Developer Platform
+    business_purpose: Approved tools
+    approval_status: approved
+    approval_date: '2025-01-01T00:00:00Z'
+    expiration_date: '2099-01-01T00:00:00Z'
+    allowed_users: []
+    allowed_groups: []
+    allowed_applications: []
+    allowed_environments: [production]
+    required_route: mcp_gateway
+    risk_tier: medium
+    metadata: {}
+  - asset_id: ai-expired
+    asset_type: ai_service
+    name: Expired AI
+    canonical_endpoint: https://api.samplemodel.test/v1/generate
+    alternate_endpoints: []
+    owner: Former Pilot
+    business_purpose: Historical pilot
+    approval_status: approved
+    approval_date: '2020-01-01T00:00:00Z'
+    expiration_date: '2021-01-01T00:00:00Z'
+    allowed_users: []
+    allowed_groups: []
+    allowed_applications: []
+    allowed_environments: []
+    required_route: llm_proxy
+    risk_tier: high
+    metadata: {}

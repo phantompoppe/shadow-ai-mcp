@@ -1,0 +1,68 @@
+# Replace endpoints and mappings with your source's documented read-only API fields.
+connectors:
+  - connector_id: siem-http
+    source_type: siem
+    kind: http
+    endpoint: https://siem.internal.example/api/search
+    method: POST
+    secret_env: SHAI_SIEM_TOKEN
+    timeout_seconds: 10
+    retries: 2
+    rate_limit_per_second: 3
+    records_field: records
+    cursor_field: next_cursor
+    field_mapping:
+      source_event_id: event_id
+      observed_at: timestamp
+      event_type: event_type
+      user_id: actor_id
+      device_id: device_id
+      source_ip: src_ip
+      destination_url: destination_url
+      evidence_reference: event_link
+  - connector_id: proxy-http
+    source_type: llm_proxy
+    kind: http
+    endpoint: https://proxy.internal.example/api/audit
+    secret_file: /run/secrets/proxy_token
+    field_mapping:
+      source_event_id: id
+      observed_at: timestamp
+      event_type: type
+      user_id: user_id
+      service_account_id: service_account_id
+      device_id: device_id
+      source_ip: source_ip
+      destination_url: destination
+      provider: provider
+      model: model
+      application_id: application
+      correlation_id: correlation_id
+      route_status: route_status
+      evidence_reference: audit_uri
+  - connector_id: gateway-http
+    source_type: mcp_gateway
+    kind: http
+    endpoint: https://gateway.internal.example/api/traffic
+    secret_env: SHAI_GATEWAY_TOKEN
+    field_mapping:
+      source_event_id: gateway_request_id
+      observed_at: timestamp
+      event_type: type
+      user_id: actor
+      service_account_id: workload
+      mcp_client: client
+      mcp_server_id: server_id
+      mcp_server_url: server_url
+      mcp_tool_name: tool_name
+      mcp_authentication_method: authentication_method
+      correlation_id: gateway_request_id
+      route_status: route_status
+      evidence_reference: event_uri
+  - connector_id: registry-http
+    source_type: registry
+    kind: http
+    endpoint: https://registry.internal.example/api/assets
+    secret_env: SHAI_REGISTRY_TOKEN
+    records_field: records
+    cursor_field: next_cursor

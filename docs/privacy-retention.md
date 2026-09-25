@@ -1,0 +1,9 @@
+# Privacy and retention
+
+Stored data is limited to actor/workload IDs, device/IP, application, destination, provider/model, route and correlation metadata, MCP server/tool name, source event ID, timestamps, source evidence URI/hash, and allowlisted scalar metadata. Registry policy fields and deterministic findings are stored for investigation. Source evidence stays in the source system.
+
+The connector field map never copies unmapped fields. Sensitive field names are rejected; nested objects are discarded; query strings and URL fragments are removed. Prompt/response text, request bodies, tool arguments/results, authorization headers, cookies, tokens, API keys, and credentials are outside the model. Default source metadata allowlist is empty. Evidence URIs with query strings or userinfo are omitted, and callers without evidence scope receive reference hashes. Logs report sanitized categories rather than source response bodies.
+
+Set `SHAI_PSEUDONYMIZATION_KEY_ENV` to the name of a secret environment variable to HMAC user ID, email, and service account ID consistently across connectors. Rotate deliberately: a new key breaks historical correlation. For strong matching, configure all connectors with the same canonical identity mapping before hashing. Observe your enterprise data handling policy for IP addresses, devices, and owner names.
+
+The poller deletes observations older than 90 days and findings older than 365 days by default, with configurable periods. Finding evidence links are deleted with their parent rows. Audit retention is left to database policy and should be exported to an immutable sink. Database backups must follow the same policy. This MVP cannot prove that a misconfigured source field contains no sensitive text; test mappings with synthetic records and restrict connector configuration changes.

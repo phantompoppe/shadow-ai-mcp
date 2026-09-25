@@ -1,0 +1,35 @@
+connectors:
+  - connector_id: registry-local
+    source_type: registry
+    kind: file
+    file_path: examples/registry.yaml
+  - connector_id: central-siem
+    source_type: siem
+    kind: fixture
+    fixture_path: examples/fixtures/siem.json
+    field_mapping: &observation_mapping
+      source_event_id: id
+      event_type: event_type
+      user_id: user_id
+      device_id: device_id
+      source_ip: source_ip
+      destination_url: destination_url
+      provider: provider
+      application_id: application_id
+      correlation_id: correlation_id
+      route_type: route_type
+      route_status: route_status
+      mcp_server_id: mcp_server_id
+      mcp_server_url: mcp_server_url
+      mcp_client: mcp_client
+      evidence_reference: evidence_reference
+  - connector_id: approved-proxy
+    source_type: llm_proxy
+    kind: fixture
+    fixture_path: examples/fixtures/proxy.json
+    field_mapping: *observation_mapping
+  - connector_id: approved-gateway
+    source_type: mcp_gateway
+    kind: fixture
+    fixture_path: examples/fixtures/gateway.json
+    field_mapping: *observation_mapping

@@ -1,0 +1,13 @@
+providers:
+  - name: exampleai
+    domains: [exampleai.test]
+    api_domains: [api.exampleai.test]
+    web_domains: [chat.exampleai.test]
+    regional_domains: []
+    required_route: llm_proxy
+  - name: samplemodel
+    domains: [samplemodel.test]
+    api_domains: [api.samplemodel.test]
+    web_domains: []
+    regional_domains: []
+    required_route: llm_proxy

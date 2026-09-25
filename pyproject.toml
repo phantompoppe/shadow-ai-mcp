@@ -1,0 +1,41 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "shadow-ai-mcp"
+version = "0.1.0"
+description = "Read-only shadow AI and MCP discovery server"
+requires-python = ">=3.12"
+dependencies = [
+  "mcp>=2.2,<3", "pydantic>=2.12,<3", "pydantic-settings>=2.10,<3",
+  "sqlalchemy>=2.0,<3", "alembic>=1.16,<2", "psycopg[binary]>=3,<4",
+  "httpx>=0.28,<1", "PyJWT[crypto]>=2.10,<3", "PyYAML>=6,<7",
+  "prometheus-client>=0.22,<1", "uvicorn>=0.35,<1",
+  "opentelemetry-api>=1.30,<2",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<10", "pytest-asyncio>=1,<2", "ruff>=0.12,<1", "mypy>=1.17,<2", "aiosqlite>=0.21,<1", "types-PyYAML>=6,<7"]
+
+[project.scripts]
+shadow-ai = "shadow_ai_mcp.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/shadow_ai_mcp"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+packages = ["shadow_ai_mcp"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
