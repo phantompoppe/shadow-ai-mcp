@@ -2,6 +2,16 @@
 
 Read-only MCP investigation server for direct AI use, MCP gateway bypass, unapproved MCP servers, and expired approvals. The server stores normalized metadata and evidence references; raw prompts, responses, MCP arguments/results, and credentials stay in source systems. It is a self-hosted discovery service, not an enforcement system or dashboard.
 
+## Open the fixture UI in a browser
+
+[Open Shadow AI MCP in GitHub Codespaces](https://codespaces.new/phantompoppe/shadow-ai-mcp?quickstart=1) while signed in to the GitHub account with access to this private repository. Choose **Create codespace** if one is not already running. Codespaces installs the Python project, imports the fixture events, runs detections, and starts the UI automatically. Open the **Ports** tab, keep port **8000** set to **Private**, and click its forwarded address. The root address redirects to `/ui/`. This runs in GitHub's hosted development environment; nothing needs to be installed on your Mac. Stop the codespace when finished. Codespaces consumes your account's compute and storage allowance and may incur charges beyond the included quota. See [browser demo](docs/browser-demo.md) for troubleshooting and security boundaries.
+
+To clone on a machine with Git and access to the private repository, paste the URL directly:
+
+```bash
+git clone https://github.com/phantompoppe/shadow-ai-mcp.git
+```
+
 ## Local demo
 
 ```bash

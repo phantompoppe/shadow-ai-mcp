@@ -24,6 +24,8 @@ async def test_ui_uses_read_only_service_and_records_audit(
     _, app, _, service = build(settings)
     transport = httpx.ASGITransport(app=app, client=("127.0.0.1", 1234))
     async with httpx.AsyncClient(transport=transport, base_url="http://127.0.0.1:8000") as client:
+        landing = await client.get("/", follow_redirects=False)
+        assert landing.status_code == 307 and landing.headers["location"] == "/ui/"
         page = await client.get("/ui/")
         assert page.status_code == 200
         assert "Shadow AI findings" in page.text

@@ -14,7 +14,7 @@ from opentelemetry import trace
 from prometheus_client import CONTENT_TYPE_LATEST, generate_latest
 from pydantic import TypeAdapter
 from starlette.applications import Starlette
-from starlette.responses import JSONResponse, Response
+from starlette.responses import JSONResponse, RedirectResponse, Response
 from starlette.routing import BaseRoute, Mount, Route
 from starlette.types import ASGIApp, Receive, Scope, Send
 
@@ -398,6 +398,11 @@ def build(settings: Settings) -> tuple[MCPServer, Starlette, Worker, Investigati
         Route("/metrics", metrics),
     ]
     if settings.ui_enabled:
+
+        async def home(request: Any) -> Response:
+            return RedirectResponse("/ui/", status_code=307)
+
+        routes.append(Route("/", home))
         routes.append(
             Mount(
                 "/ui",

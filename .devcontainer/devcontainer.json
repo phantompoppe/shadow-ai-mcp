@@ -1,0 +1,13 @@
+{
+  "name": "Shadow AI MCP fixture demo",
+  "image": "mcr.microsoft.com/devcontainers/python:1-3.12-bookworm",
+  "postCreateCommand": "python -m pip install -e '.[dev]'",
+  "postAttachCommand": "bash scripts/codespaces-demo.sh",
+  "forwardPorts": [8000],
+  "portsAttributes": {
+    "8000": {
+      "label": "Shadow AI investigation UI",
+      "onAutoForward": "openBrowser"
+    }
+  }
+}
